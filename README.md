@@ -33,6 +33,10 @@ Press **Restore normal settings** and everything goes back to what it was before
 
 ## Install
 
+### Download
+Grab `PowerOut.dmg` (or `PowerOut.zip`) from the [latest release](https://github.com/kranmal/PowerOut/releases/latest), open it and drag PowerOut into Applications. It is a universal build for Apple silicon and Intel.
+
+### Build from source
 You need macOS 13 or later and the Xcode Command Line Tools (`xcode-select --install`). Full Xcode is not required.
 
 ```bash
@@ -42,7 +46,7 @@ cd PowerOut
 open build/PowerOut.app
 ```
 
-To keep it, drag `build/PowerOut.app` into `/Applications`.
+To keep it, drag `build/PowerOut.app` into `/Applications`. Run `./dist.sh` to also produce `dist/PowerOut.dmg` and `dist/PowerOut.zip`.
 
 The app is ad-hoc signed, not notarized. If macOS refuses to open it the first time, right-click the app and choose **Open**.
 
