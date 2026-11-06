@@ -25,6 +25,8 @@ Press **Restore normal settings** and everything goes back to what it was before
 
 **Auto-activate:** optionally switch itself on once when your battery drops below a threshold (5 to 50%) while unplugged.
 
+**Launch at login:** tick the box in the menu so PowerOut is already running (and auto-activate is armed) whenever your Mac starts. It uses Apple's login item API; if macOS asks, approve PowerOut under System Settings → General → Login Items. Best done with the app in `/Applications`.
+
 ### Things it deliberately does not do
 - It only changes your **battery** power profile, never your plugged-in (AC) one.
 - It quits apps politely (the same as Cmd+Q), never force-kills them. Nothing is selected by default.
@@ -87,6 +89,7 @@ The same code can run headlessly, which is how it was tested:
 ```bash
 open -n -W build/PowerOut.app --args --activate
 open -n -W build/PowerOut.app --args --restore
+open -n -W build/PowerOut.app --args --login-on    # or --login-off
 ```
 
 Launch it with `open`. Running the binary directly from a shell crashes when it touches Bluetooth, because macOS attributes the privacy request to the parent process.

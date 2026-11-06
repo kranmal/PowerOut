@@ -1,6 +1,7 @@
 import Foundation
 import AppKit
 import SwiftUI
+import ServiceManagement
 
 /// What the machine looked like before PowerOut touched it, so it can be put back.
 struct Snapshot: Codable {
@@ -70,6 +71,22 @@ final class PowerManager: ObservableObject {
     }
 
     private func save(_ key: String, _ value: Bool) { defaults.set(value, forKey: key) }
+
+    // MARK: Launch at login
+
+    var launchAtLogin: Bool { SMAppService.mainApp.status == .enabled }
+
+    func setLaunchAtLogin(_ on: Bool) {
+        do {
+            if on { try SMAppService.mainApp.register() } else { try SMAppService.mainApp.unregister() }
+            if on && SMAppService.mainApp.status == .requiresApproval {
+                status = "Approve PowerOut in System Settings → General → Login Items"
+            }
+        } catch {
+            status = "Couldn't change login item: \(error.localizedDescription)"
+        }
+        objectWillChange.send()
+    }
 
     // MARK: Refresh
 
