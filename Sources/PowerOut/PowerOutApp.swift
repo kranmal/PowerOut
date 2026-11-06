@@ -7,11 +7,14 @@ struct PowerOutApp: App {
     init() {
         // Headless mode for testing: `PowerOut --activate` / `PowerOut --restore`
         let args = CommandLine.arguments
-        guard args.contains("--activate") || args.contains("--restore") else { return }
+        let headless = ["--activate", "--restore", "--login-on", "--login-off"]
+        guard args.contains(where: headless.contains) else { return }
         MainActor.assumeIsolated {
             let m = PowerManager()
-            if args.contains("--activate") { m.activate() } else { m.restore() }
-            print(m.status)
+            if args.contains("--activate") { m.activate() }
+            else if args.contains("--restore") { m.restore() }
+            else { m.setLaunchAtLogin(args.contains("--login-on")) }
+            print(m.status, "| launchAtLogin:", m.launchAtLogin)
         }
         exit(0)
     }
@@ -89,6 +92,10 @@ struct ContentView: View {
                 Stepper("\(m.autoThreshold)%", value: $m.autoThreshold, in: 5...50, step: 5)
                     .padding(.leading, 20)
             }
+
+            Toggle("Launch at login", isOn: Binding(
+                get: { m.launchAtLogin },
+                set: { m.setLaunchAtLogin($0) }))
 
             Divider()
             HStack {
